@@ -1,1 +1,196 @@
-Página de prueba de RefugiosBogotá
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RefugiosBogotá — Conecta, Adopta, Transforma</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+.nearby-section{padding:86px 0;background:var(--crema)}.nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}.nearby-title{font-family:var(--font-display);margin:0 0 14px}.nearby-cards{display:grid;gap:12px}.nearby-card{background:#fff;border:1px solid var(--borde);border-radius:14px;padding:16px;display:flex;justify-content:space-between;gap:12px}.nearby-card h4{margin:0 0 5px}.nearby-meta{font-size:.82rem;color:var(--texto-3)}.nearby-empty{padding:22px;background:#fff;border:1px dashed var(--borde);border-radius:14px;color:var(--texto-3);font-size:.88rem}@media(max-width:800px){.nearby-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="landing">
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+      </a>
+      <div class="nav-links">
+        <a href="animales.html">Adoptar</a>
+        <a href="refugios.html">Buscar refugios</a>
+        <a href="#refugios">Explorar</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#stats">Impacto</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-nav-outline">Inicia sesión</a>
+        <a href="registro.html" class="btn-nav-fill">Regístrate</a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob blob-1"></div>
+      <div class="hero-blob blob-2"></div>
+      <div class="hero-blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        128 refugios activos en Bogotá
+      </div>
+      <h1 class="hero-title">
+        Cada animal merece<br/>
+        <em>un hogar con amor.</em>
+      </h1>
+      <p class="hero-sub">
+        La red más grande de refugios y adoptantes de Bogotá. Reporta animales en situación de calle, encuentra tu compañero ideal y apoya fundaciones cercanas a ti.
+      </p>
+      <div class="hero-cta">
+        <a href="animales.html" class="btn-ghost btn-lg">Ver animales en adopción</a>
+      </div>
+      <div class="hero-trust">
+        <span>✓ Gratis para adoptantes</span>
+        <span>✓ Verificado</span>
+        <span>✓ Solo Bogotá</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card card-float" style="--delay:0s">
+        <div class="card-emoji">🐶</div><div><div class="card-name">Milo</div><div class="card-loc">📍 Chapinero</div></div><span class="card-badge">Disponible</span>
+      </div>
+      <div class="hero-card card-float" style="--delay:0.4s">
+        <div class="card-emoji">🐶</div><div><div class="card-name">Luna</div><div class="card-loc">📍 Suba</div></div><span class="card-badge">Disponible</span>
+      </div>
+      <div class="hero-card card-float" style="--delay:0.8s">
+        <div class="card-emoji">🐕</div><div><div class="card-name">Rocky</div><div class="card-loc">📍 Kennedy</div></div><span class="card-badge card-badge--adopted">Adoptado</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section" id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item" data-count="128">
+          <span class="stat-number" id="s1">0</span>
+          <span class="stat-label">Refugios registrados</span>
+        </div>
+        <div class="stat-item" data-count="3400">
+          <span class="stat-number" id="s2">0</span>
+          <span class="stat-label">Animales adoptados</span>
+        </div>
+        <div class="stat-item" data-count="12000">
+          <span class="stat-number" id="s3">0</span>
+          <span class="stat-label">Usuarios activos</span>
+        </div>
+        <div class="stat-item" data-count="19">
+          <span class="stat-number" id="s4">0</span>
+          <span class="stat-label">Localidades cubiertas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTAS CERCANAS -->
+  <section class="nearby-section" id="cerca">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Cerca de ti</span>
+        <h2 class="section-title">Refugios y perros disponibles cerca</h2>
+        <p class="section-sub">Permite el acceso a tu ubicación para mostrarte opciones de tu localidad.</p>
+        <button class="btn-primary btn-sm" id="btn-ubicacion-landing" onclick="solicitarUbicacionLanding()">📍 Mostrar cerca de mí</button>
+        <p id="ubicacion-landing-estado" class="section-sub" style="margin-top:10px"></p>
+      </div>
+      <div class="nearby-grid">
+        <div><h3 class="nearby-title">🏠 Refugios cercanos</h3><div id="nearby-refugios" class="nearby-cards"><div class="nearby-empty">Solicita tu ubicación para ver refugios cercanos.</div></div></div>
+        <div><h3 class="nearby-title">🐶 Perros en adopción</h3><div id="nearby-animales" class="nearby-cards"><div class="nearby-empty">Solicita tu ubicación para ver perros disponibles.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="how-section" id="como-funciona">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Proceso</span>
+        <h2 class="section-title">Así de simple funciona</h2>
+        <p class="section-sub">En tres pasos conectamos animales con hogares amorosos.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">📝</div>
+          <h3>Regístrate</h3>
+          <p>Crea tu cuenta gratis en menos de 2 minutos. Solo necesitas tu correo y tu localidad en Bogotá.</p>
+          <a href="registro.html" class="step-link">Crear cuenta →</a>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🔍</div>
+          <h3>Explora refugios</h3>
+          <p>Descubre refugios y fundaciones cercanas a ti y encuentra perros que necesitan un hogar.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">🏠</div>
+          <h3>Adopta o reporta</h3>
+          <p>Inicia el proceso de adopción o reporta un animal en situación de calle para que reciba ayuda.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- EXPLORAR -->
+  <section class="refugios-section" id="refugios">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Red de refugios</span>
+        <h2 class="section-title">Explora refugios verificados</h2>
+        <p class="section-sub">Consulta los refugios disponibles en Bogotá y revisa la información de contacto y ubicación.</p>
+        <a href="refugios.html" class="btn-primary btn-lg">Ver refugios</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-section">
+    <div class="cta-bg">
+      <div class="cta-blob"></div>
+    </div>
+    <div class="container">
+      <div class="cta-inner">
+        <h2 class="cta-title">Empieza hoy.<br/><em>Un animal te está esperando.</em></h2>
+        <p class="cta-sub">Únete a más de 12.000 personas que ya están transformando la vida de los animales en Bogotá.</p>
+        <a href="registro.html" class="btn-primary btn-lg btn-white">
+          Crear cuenta gratis
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+      </div>
+      <p class="footer-copy">© 2026 RefugiosBogotá · Ingeniería de Software · Universidad Central</p>
+    </div>
+  </footer>
+
+  <script src="landing.js?v=26"></script>
+<script src="roles-ui.js"></script>
+</body>
+</html>
