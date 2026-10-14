@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar sesión — RefugiosBogotá</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="page-registro">
+
+  <nav class="nav nav--minimal" id="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+      </a>
+      <a href="index.html" class="btn-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Volver al inicio
+      </a>
+    </div>
+  </nav>
+
+  <div id="screen-login" class="reg-screen active">
+    <div class="reg-layout">
+
+      <!-- Panel izquierdo -->
+      <aside class="reg-aside reg-aside--login">
+        <div class="aside-content">
+          <h2 class="aside-title">Bienvenido de nuevo a la comunidad.</h2>
+          <ul class="aside-features">
+            <li>
+              <span class="feat-icon">🏠</span>
+              <div>
+                <strong>Continúa donde lo dejaste</strong>
+                <p>Accede a tus búsquedas, favoritos y solicitudes de adopción.</p>
+              </div>
+            </li>
+            <li>
+              <span class="feat-icon">🔔</span>
+              <div>
+                <strong>Notificaciones activas</strong>
+                <p>Recibe alertas cuando haya animales disponibles cerca de ti.</p>
+              </div>
+            </li>
+            <li>
+              <span class="feat-icon">📋</span>
+              <div>
+                <strong>Tu historial</strong>
+                <p>Revisa tus reportes, adopciones y feedback registrados.</p>
+              </div>
+            </li>
+          </ul>
+          <div class="aside-testimonial">
+            <p>"Gracias a RefugiosBogotá encontré el refugio perfecto para donar."</p>
+            <span>— Andrés M., Kennedy</span>
+          </div>
+        </div>
+        <div class="aside-blobs">
+          <div class="ab ab-1"></div>
+          <div class="ab ab-2"></div>
+        </div>
+      </aside>
+
+      <!-- Panel derecho: formulario -->
+      <main class="reg-main">
+        <div class="reg-form-wrap">
+          <div class="reg-header">
+            <h1>Iniciar sesión</h1>
+            <p>¿No tienes cuenta? <a href="registro.html">Regístrate gratis</a></p>
+          </div>
+
+          <!-- Mensaje de error global -->
+          <div id="alert-error" class="alert-error" style="display:none"></div>
+
+          <form id="form-login" novalidate>
+            <div class="field">
+              <label for="correo">Correo electrónico <span class="req">*</span></label>
+              <input type="email" id="correo" placeholder="correo@ejemplo.com" autocomplete="email"/>
+              <span class="ferror" id="error-correo"></span>
+            </div>
+
+            <div class="field">
+              <label for="contrasena">Contraseña <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <input type="password" id="contrasena" placeholder="Tu contraseña" autocomplete="current-password"/>
+                <button type="button" class="icon-btn" onclick="togglePw()" aria-label="Ver contraseña">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <span class="ferror" id="error-contrasena"></span>
+            </div>
+
+            <div class="login-options">
+              <label class="checkbox-wrap">
+                <input type="checkbox" id="recordarme"/>
+                <span>Recordarme</span>
+              </label>
+              <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <button type="submit" class="btn-primary btn-submit" id="btn-submit">
+              <span id="btn-text">Ingresar</span>
+              <span id="btn-loader" class="spinner" style="display:none"></span>
+            </button>
+          </form>
+
+          <p class="reg-terms">
+            Al ingresar aceptas los <a href="#">Términos de uso</a> y la <a href="#">Política de privacidad</a>.
+          </p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="login.js"></script>
+<script src="roles-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mis Refugios — RefugiosBogotá</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    .mis-refugios-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .mr-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .mr-title-block { display: flex; flex-direction: column; gap: 4px; }
+    .mr-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: var(--texto); }
+    .mr-sub   { font-size: 0.9rem; color: var(--texto-3); }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--texto-3);
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .btn-back:hover { color: var(--verde); }
+
+    /* Cards de refugios */
+    .mr-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .mr-card {
+      background: var(--blanco);
+      border: 1.5px solid var(--borde);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .mr-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.07); border-color: var(--verde-light); }
+
+    .mr-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-mid) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .mr-card-body { flex: 1; min-width: 0; }
+    .mr-card-nombre {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texto);
+      margin: 0 0 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mr-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--texto-3);
+      margin-bottom: 10px;
+    }
+    .mr-card-meta span { display: flex; align-items: center; gap: 4px; }
+    .mr-card-desc {
+      font-size: 0.875rem;
+      color: var(--texto-2);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .mr-card-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+
+    .btn-editar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--verde);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-editar:hover { background: var(--verde-mid); }
+
+    /* Estado vacío */
+    .mr-empty {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--texto-3);
+    }
+    .mr-empty-icon { font-size: 3rem; margin-bottom: 16px; }
+    .mr-empty h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--texto-2); margin-bottom: 8px; }
+    .mr-empty p  { font-size: 0.9rem; margin-bottom: 24px; }
+
+    /* Loading skeleton */
+    .mr-skeleton {
+      background: var(--crema);
+      border-radius: 16px;
+      height: 120px;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.5; }
+    }
+
+    /* Dropdown de perfil (mismo que refugios.html) */
+    .profile-dropdown { position: relative; }
+    .profile-trigger {
+      display: flex; align-items: center; gap: 8px;
+      background: none; border: 1.5px solid var(--borde);
+      border-radius: 999px; padding: 5px 12px 5px 6px;
+      cursor: pointer; font-family: var(--font-body);
+      font-size: 0.875rem; font-weight: 500; color: var(--texto);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .profile-trigger:hover { border-color: var(--verde-light); background: var(--crema); }
+    .profile-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--verde); color: #fff;
+      font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; text-transform: uppercase;
+    }
+    .profile-chevron { color: var(--texto-3); transition: transform 0.2s; flex-shrink: 0; }
+    .profile-dropdown.open .profile-chevron { transform: rotate(180deg); }
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--blanco); border: 1.5px solid var(--borde);
+      border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      min-width: 180px; padding: 6px; z-index: 999;
+      opacity: 0; transform: translateY(-6px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .profile-dropdown.open .dropdown-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 9px; width: 100%;
+      padding: 9px 12px; border-radius: 8px;
+      font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+      color: var(--texto); text-decoration: none; background: none;
+      border: none; cursor: pointer; transition: background 0.15s; text-align: left;
+    }
+    .dropdown-item:hover { background: var(--crema); }
+    .dropdown-item--danger { color: #DC2626; }
+    .dropdown-item--danger:hover { background: #FEF2F2; }
+  
+    .gestion-section { margin-top: 42px; }
+    .gestion-section h2 { font-family:var(--font-display); font-size:1.45rem; margin-bottom:6px; color:var(--texto); }
+    .gestion-section > p { color:var(--texto-3); font-size:.88rem; margin-bottom:18px; }
+    .gestion-tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+    .gestion-tab { border:1px solid var(--borde); background:#fff; border-radius:999px; padding:8px 14px; cursor:pointer; font:500 .84rem var(--font-body); color:var(--texto-2); }
+    .gestion-tab.active { background:var(--verde); color:#fff; border-color:var(--verde); }
+    .gestion-grid { display:grid; gap:12px; }.gestion-toolbar{display:flex;justify-content:flex-end;margin-bottom:2px}
+    .gestion-card { background:#fff; border:1px solid var(--borde); border-radius:14px; padding:18px; display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+    .gestion-card h3 { font-size:1rem; margin:0 0 7px; color:var(--texto); }
+    .gestion-meta { font-size:.82rem; color:var(--texto-2); line-height:1.65; }
+    .gestion-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .gestion-btn { border:1px solid var(--borde); background:#fff; border-radius:8px; padding:8px 11px; cursor:pointer; font:.78rem var(--font-body); font-weight:600; }
+    .gestion-btn.primary { background:var(--verde); color:#fff; border-color:var(--verde); }
+    .gestion-btn.warn { background:#fff7ed; border-color:#fed7aa; color:#9a3412; }
+    .gestion-select { padding:8px 10px; border:1px solid var(--borde); border-radius:8px; font:.78rem var(--font-body); }
+    .estado-pill { display:inline-block; padding:4px 8px; border-radius:999px; background:var(--crema); font-size:.7rem; font-weight:700; margin-left:5px; }
+    @media(max-width:650px){ .gestion-card{display:block}.gestion-actions{justify-content:flex-start;margin-top:12px} }
+.chat-box{margin-top:12px;border-top:1px solid var(--borde);padding-top:12px}.chat-messages{max-height:220px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}.chat-msg{padding:8px 10px;border-radius:10px;background:#f7f3ed;font-size:.82rem}.chat-compose{display:flex;gap:8px}.chat-compose input{flex:1}.chat-compose button{white-space:nowrap}</style>
+</head>
+<body class="page-app">
+
+  <nav class="nav nav--app" id="nav">
+    <div class="nav-inner">
+      <a href="animales.html" class="logo">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+      </a>
+      <div class="nav-app-links">
+        <a href="animales.html" class="nav-app-link">Adoptar</a>
+        <a href="refugios.html"         class="nav-app-link" id="tab-buscar">Buscar refugios</a>
+        <a href="registro-refugio.html" class="nav-app-link" data-rol="adoptante,refugio" id="tab-registrar">Registrar refugio</a>
+      </div>
+      <div class="nav-user" id="nav-user">
+        <div class="profile-dropdown" id="profile-dropdown">
+          <button class="profile-trigger" onclick="toggleDropdown()">
+            <span class="profile-avatar" id="profile-avatar">?</span>
+            <span class="profile-name" id="user-greeting"></span>
+            <svg class="profile-chevron" width="12" height="12" viewBox="0 0 12 8" fill="none">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu" id="dropdown-menu"><a href="mis-refugios.html" class="dropdown-item" data-rol="refugio">🏠 Mis refugios</a><a href="perfil.html" class="dropdown-item">👤 Mi perfil</a><button class="dropdown-item dropdown-item--danger" onclick="cerrarSesion()">↪ Cerrar sesión</button></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mis-refugios-wrap">
+    <a href="refugios.html" class="btn-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Volver a refugios
+    </a>
+
+    <div class="mr-header">
+      <div class="mr-title-block">
+        <h1 class="mr-title">Mis refugios</h1>
+        <p class="mr-sub" id="mr-sub">Cargando...</p>
+      </div>
+      <a href="registro-refugio.html" class="btn-primary btn-sm">+ Registrar otro refugio</a>
+    </div>
+
+    <div class="mr-grid" id="mr-grid">
+      <!-- Skeletons de carga -->
+      <div class="mr-skeleton"></div>
+      <div class="mr-skeleton"></div>
+    </div>
+
+    <div class="mr-empty" id="mr-empty" style="display:none">
+      <div class="mr-empty-icon">🏠</div>
+      <h3>Aún no tienes refugios registrados</h3>
+      <p>Cuando registres un refugio, aparecerá aquí.</p>
+      <a href="registro-refugio.html" class="btn-primary">Registrar mi primer refugio</a>
+    </div>
+  </div>
+
+  <section class="gestion-section mis-refugios-wrap" id="gestion-refugio">
+    <h2>Administración del refugio</h2>
+    <p>Consulta los reportes recibidos en tus refugios y administra los animales que tienes registrados.</p>
+    <div class="gestion-tabs">
+      <button class="gestion-tab active" id="tab-reportes" onclick="mostrarGestion('reportes')">Reportes recibidos</button>
+      <button class="gestion-tab" id="tab-animales" onclick="mostrarGestion('animales')">Mis animales</button>
+      <button class="gestion-tab" id="tab-adopciones" onclick="mostrarGestion('adopciones')">Solicitudes de adopción</button><button class="gestion-tab" id="tab-adoptados" onclick="mostrarGestion('adoptados')">Perros adoptados</button>
+    </div>
+    <div class="gestion-grid" id="gestion-grid"><div class="mr-skeleton"></div></div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+  <script src="mis-refugios.js?v=25"></script>
+<script src="roles-ui.js"></script>
+</body>
+</html>

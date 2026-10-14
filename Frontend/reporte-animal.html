@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reportar Animal — RefugiosBogotá</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Dropdown de perfil (igual que refugios.html) ── */
+    .profile-dropdown { position: relative; }
+    .profile-trigger {
+      display: flex; align-items: center; gap: 8px;
+      background: none; border: 1.5px solid var(--borde);
+      border-radius: 999px; padding: 5px 12px 5px 6px;
+      cursor: pointer; font-family: var(--font-body);
+      font-size: 0.875rem; font-weight: 500; color: var(--texto);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .profile-trigger:hover { border-color: var(--verde-light); background: var(--crema); }
+    .profile-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--verde); color: #fff;
+      font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; text-transform: uppercase;
+    }
+    .profile-chevron { color: var(--texto-3); transition: transform 0.2s; flex-shrink: 0; }
+    .profile-dropdown.open .profile-chevron { transform: rotate(180deg); }
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--blanco); border: 1.5px solid var(--borde);
+      border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      min-width: 180px; padding: 6px; z-index: 999;
+      opacity: 0; transform: translateY(-6px);
+      pointer-events: none; transition: opacity 0.18s, transform 0.18s;
+    }
+    .profile-dropdown.open .dropdown-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 9px; width: 100%;
+      padding: 9px 12px; border-radius: 8px;
+      font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+      color: var(--texto); text-decoration: none;
+      background: none; border: none; cursor: pointer;
+      transition: background 0.15s; text-align: left;
+    }
+    .dropdown-item:hover { background: var(--crema); }
+    .dropdown-item--danger { color: #DC2626; }
+    .dropdown-item--danger:hover { background: #FEF2F2; }
+
+    /* ── Layout del formulario ── */
+    .reporte-layout {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .reporte-header {
+      margin-bottom: 32px;
+    }
+    .reporte-header h1 {
+      font-family: var(--font-display);
+      font-size: 2rem; font-weight: 600;
+      color: var(--texto); margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .reporte-header p { font-size: 0.9rem; color: var(--texto-2); line-height: 1.6; }
+
+    .reporte-banner {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--verde-pale); border: 1px solid rgba(76,175,125,0.35);
+      border-radius: var(--radius-sm); padding: 14px 16px;
+      margin-bottom: 28px; font-size: 0.88rem; color: var(--verde);
+      font-weight: 500; line-height: 1.5;
+    }
+    .reporte-banner svg { flex-shrink: 0; margin-top: 1px; }
+
+    .reporte-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .reporte-card-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--texto); margin-bottom: 20px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--crema-2);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .reporte-card-title span { font-size: 1.15rem; }
+
+    /* Campo de formulario dentro del card */
+    .rf-field { margin-bottom: 18px; }
+    .rf-field:last-child { margin-bottom: 0; }
+    .rf-field label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: var(--texto-2); margin-bottom: 6px; letter-spacing: 0.1px;
+    }
+    .rf-field label .req { color: var(--tierra); margin-left: 2px; }
+    .rf-field input[type="text"],
+    .rf-field textarea {
+      width: 100%; padding: 10px 14px;
+      border: 1.5px solid var(--borde); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 0.92rem;
+      color: var(--texto); background: var(--blanco); outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .rf-field input[type="text"]:focus,
+    .rf-field textarea:focus {
+      border-color: var(--verde-light);
+      box-shadow: 0 0 0 3px var(--verde-glow);
+    }
+    .rf-field input.invalid,
+    .rf-field textarea.invalid { border-color: var(--error); background: var(--error-pale); }
+    .rf-field input.valid,
+    .rf-field textarea.valid  { border-color: var(--verde-light); }
+
+    .rf-field textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .rf-field .field-hint { font-size: 0.76rem; color: var(--texto-3); margin-top: 4px; }
+    .rf-field .ferror { display: block; font-size: 0.76rem; color: var(--error); margin-top: 4px; min-height: 16px; }
+    .char-count { font-size: 0.74rem; color: var(--texto-3); text-align: right; margin-top: 3px; }
+
+    /* Select dentro de rf-field */
+    .rf-select-wrap { position: relative; }
+    .rf-select-wrap select {
+      width: 100%; padding: 10px 36px 10px 14px;
+      border: 1.5px solid var(--borde); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 0.92rem;
+      color: var(--texto); background: var(--blanco);
+      appearance: none; outline: none; cursor: pointer;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .rf-select-wrap select:focus { border-color: var(--verde-light); box-shadow: 0 0 0 3px var(--verde-glow); }
+    .rf-select-wrap select.invalid { border-color: var(--error); background: var(--error-pale); }
+    .rf-select-wrap .select-arrow { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--texto-3); }
+    .btn-remove-foto:hover { background: var(--error-pale); border-color: var(--error); color: var(--error); }
+    .btn-add-foto {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 8px; padding: 7px 14px;
+      border: 1.5px dashed var(--borde); border-radius: var(--radius-sm);
+      background: none; font-family: var(--font-body); font-size: 0.84rem;
+      font-weight: 500; color: var(--texto-3); cursor: pointer;
+      transition: all var(--t);
+    }
+    .btn-add-foto:hover { border-color: var(--verde-light); color: var(--verde); }
+
+    /* Botón de envío */
+    .reporte-actions {
+      display: flex; gap: 12px; margin-top: 8px;
+    }
+    .reporte-actions .btn-primary { flex: 1; justify-content: center; }
+
+    /* Pantalla de confirmación */
+    #screen-success { display: none; min-height: calc(100vh - 64px); align-items: center; justify-content: center; background: var(--crema); }
+    #screen-success.active { display: flex; }
+    .success-refugios {
+      background: var(--verde-pale); border: 1px solid rgba(76,175,125,0.3);
+      border-radius: var(--radius-sm); padding: 14px 18px;
+      margin: 16px 0; font-size: 0.87rem; color: var(--verde);
+    }
+    .success-refugios strong { display: block; margin-bottom: 6px; font-weight: 600; }
+    .success-refugios ul { padding-left: 18px; }
+    .success-refugios ul li { margin-bottom: 2px; }
+    .success-no-refugios {
+      background: var(--crema-2); border-radius: var(--radius-sm);
+      padding: 14px 18px; margin: 16px 0; font-size: 0.87rem; color: var(--texto-3);
+    }
+  </style>
+</head>
+<body class="page-app">
+
+  <!-- NAV (idéntico al de refugios.html) -->
+  <nav class="nav nav--app" id="nav">
+    <div class="nav-inner">
+      <a href="animales.html" class="logo">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+      </a>
+      <div class="nav-app-links">
+        <a href="animales.html" class="nav-app-link">Adoptar</a>
+        <a href="refugios.html"          class="nav-app-link" id="tab-buscar">Buscar refugios</a>
+        <a href="reporte-animal.html"    class="nav-app-link active" id="tab-reporte">Reportar animal</a>
+      </div>
+      <div class="nav-user" id="nav-user">
+        <div class="profile-dropdown" id="profile-dropdown">
+          <button class="profile-trigger" id="profile-trigger" onclick="toggleDropdown()">
+            <span class="profile-avatar" id="profile-avatar">?</span>
+            <span class="profile-name"   id="user-greeting"></span>
+            <svg class="profile-chevron" width="12" height="12" viewBox="0 0 12 8" fill="none">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu" id="dropdown-menu"><a href="mis-adopciones.html" class="dropdown-item" data-rol="adoptante">🐾 Mis adopciones</a><a href="mis-refugios.html" class="dropdown-item" data-rol="refugio">🏠 Mis refugios</a><a href="perfil.html" class="dropdown-item">👤 Mi perfil</a><a href="registro-refugio.html" class="dropdown-item" data-rol="adoptante">🏠 Registrar refugio</a><a href="admin.html" class="dropdown-item" data-rol="administrador">⚙️ Administración</a><button class="dropdown-item dropdown-item--danger" onclick="cerrarSesion()">↪ Cerrar sesión</button></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ PANTALLA 1: FORMULARIO ══ -->
+  <div id="screen-form">
+    <div class="reporte-layout">
+
+      <div class="reporte-header">
+        <h1>Reportar animal</h1>
+        <p>
+          ¿Encontraste un animal en situación de calle, pérdida o riesgo?
+          Completa la información y los refugios cercanos serán notificados automáticamente.
+        </p>
+      </div>
+
+      <div class="reporte-banner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        Los refugios de la localidad que indiques recibirán la notificación de este reporte para poder actuar.
+      </div>
+
+      <form id="form-reporte" novalidate>
+
+        <!-- Card 1: Información del animal -->
+        <div class="reporte-card">
+          <div class="reporte-card-title">
+            <span>🐾</span> Información del animal
+          </div>
+          <!-- Descripción física -->
+          <div class="rf-field">
+            <label for="descripcion_fisica">Descripción física y situación <span class="req">*</span></label>
+            <textarea id="descripcion_fisica" placeholder="Ej. Perro adulto color café, con collar azul, cojeando de la pata trasera derecha. Se encuentra debajo del puente..." maxlength="500"></textarea>
+            <div class="char-count" id="char-desc">0 / 500</div>
+            <span class="ferror" id="error-descripcion_fisica"></span>
+          </div>
+
+          <!-- Estado aparente -->
+          <div class="rf-field">
+            <label for="estado_animal">Estado aparente del animal <span class="req">*</span></label>
+            <div class="rf-select-wrap">
+              <select id="estado_animal">
+                <option value="">Selecciona el estado...</option>
+                <option value="herido">🩹 Herido</option>
+                <option value="perdido">🔍 Perdido</option>
+                <option value="abandonado">😢 Abandonado</option>
+                <option value="sano">✅ Sano pero en riesgo</option>
+              </select>
+              <svg class="select-arrow" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <span class="ferror" id="error-estado_animal"></span>
+          </div>
+        </div>
+
+        <!-- Card 2: Ubicación -->
+        <div class="reporte-card">
+          <div class="reporte-card-title">
+            <span>📍</span> Ubicación del animal
+          </div>
+
+          <!-- Botón geolocalización -->
+          <div class="rf-field">
+            <button type="button" class="btn-geolocate" id="btn-geolocate-reporte" onclick="usarMiUbicacionReporte()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" opacity=".3"/></svg>
+              Usar mi ubicación actual
+            </button>
+            <span class="field-hint" style="font-size:0.76rem;color:var(--texto-3);margin-top:6px;display:block;">O escribe la dirección manualmente</span>
+          </div>
+
+          <!-- Dirección -->
+          <div class="rf-field">
+            <label for="ubicacion">Dirección o lugar exacto <span class="req">*</span></label>
+            <input type="text" id="ubicacion" placeholder="Ej. Calle 80 # 68-15, cerca al parque principal, Engativá"/>
+            <span class="ferror" id="error-ubicacion"></span>
+          </div>
+
+          <!-- Localidad -->
+          <div class="rf-field">
+            <label for="localidad">Localidad <span class="req">*</span></label>
+            <div class="rf-select-wrap">
+              <select id="localidad">
+                <option value="">Selecciona la localidad...</option>
+                <option value="usaquen">Usaquén</option>
+                <option value="chapinero">Chapinero</option>
+                <option value="santa_fe">Santa Fe</option>
+                <option value="san_cristobal">San Cristóbal</option>
+                <option value="usme">Usme</option>
+                <option value="tunjuelito">Tunjuelito</option>
+                <option value="bosa">Bosa</option>
+                <option value="kennedy">Kennedy</option>
+                <option value="fontibon">Fontibón</option>
+                <option value="engativa">Engativá</option>
+                <option value="suba">Suba</option>
+                <option value="barrios_unidos">Barrios Unidos</option>
+                <option value="teusaquillo">Teusaquillo</option>
+                <option value="los_martires">Los Mártires</option>
+                <option value="antonio_narino">Antonio Nariño</option>
+                <option value="puente_aranda">Puente Aranda</option>
+                <option value="candelaria">La Candelaria</option>
+                <option value="rafael_uribe">Rafael Uribe Uribe</option>
+                <option value="ciudad_bolivar">Ciudad Bolívar</option>
+              </select>
+              <svg class="select-arrow" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <span class="ferror" id="error-localidad"></span>
+          </div>
+        </div>
+
+        <!-- Card 3: Fotos (opcional) -->
+        <div class="reporte-card">
+          <div class="reporte-card-title">
+            <span>📷</span> Fotografías del animal
+            <span style="font-family:var(--font-body);font-size:0.78rem;font-weight:400;color:var(--texto-3);margin-left:auto;">Opcional</span>
+          </div>
+
+          <div class="rf-field">
+            <label>URLs de fotografías</label>
+            <div class="foto-url-list" id="foto-url-list">
+              <div class="foto-url-item">
+                <input type="text" class="foto-url-input" placeholder="Ej. https://i.imgur.com/foto.jpg"/>
+                <button type="button" class="btn-remove-foto" onclick="removeFotoInput(this)" title="Quitar">✕</button>
+              </div>
+            </div>
+            <button type="button" class="btn-add-foto" onclick="addFotoInput()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Agregar otra foto
+            </button>
+            <span class="field-hint">Agrega URLs públicas de imágenes del animal para ayudar a identificarlo.</span>
+            <span class="ferror" id="error-fotos"></span>
+          </div>
+        </div>
+
+        <!-- Alerta global de errores -->
+        <div id="alert-global" class="alert-error" style="display:none"></div>
+
+        <!-- Acciones -->
+        <div class="reporte-actions">
+          <button type="submit" class="btn-primary btn-submit" id="btn-submit">
+            <span id="btn-text">Enviar reporte</span>
+            <span id="btn-loader" class="spinner" style="display:none"></span>
+          </button>
+          <a href="refugios.html" class="btn-ghost">Cancelar</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ PANTALLA 2: CONFIRMACIÓN ══ -->
+  <div id="screen-success">
+    <div class="success-wrap">
+      <div class="success-check">✓</div>
+      <h2>¡Reporte enviado!</h2>
+      <p class="success-msg">
+        El reporte ha sido enviado correctamente.
+        Los refugios de la localidad han sido notificados y podrán tomar las acciones necesarias.
+      </p>
+
+      <div id="success-refugios-info"></div>
+
+      <div class="success-data" id="success-data"></div>
+
+      <div class="success-actions">
+        <a href="refugios.html" class="btn-primary">Buscar refugios</a>
+        <button class="btn-ghost-sm" onclick="nuevoReporte()">Reportar otro animal</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="reporte-animal.js"></script>
+<script src="roles-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crear cuenta — RefugiosBogotá</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="page-registro">
+    <!-- NAV mínimo -->
+    <nav class="nav nav--minimal" id="nav">
+      <div class="nav-inner">
+        <a href="index.html" class="logo">
+          <span class="logo-paw">🐾</span>
+          <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+        </a>
+        <a href="index.html" class="btn-back">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          Volver al inicio
+        </a>
+      </div>
+    </nav>
+
+    <!-- PANTALLA: Formulario -->
+    <div id="screen-form" class="reg-screen active">
+      <div class="reg-layout">
+        <!-- Columna izquierda: ilustración / info -->
+        <aside class="reg-aside">
+          <div class="aside-content">
+            <h2 class="aside-title">
+              Únete a la comunidad que cuida a los animales de Bogotá.
+            </h2>
+            <ul class="aside-features">
+              <li>
+                <span class="feat-icon">🔍</span>
+                <div>
+                  <strong>Busca refugios</strong>
+                  <p>
+                    Encuentra fundaciones verificadas cerca de tu localidad.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <span class="feat-icon">📢</span>
+                <div>
+                  <strong>Reporta animales</strong>
+                  <p>Ayuda a animales en situación de calle con un clic.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feat-icon">🏠</span>
+                <div>
+                  <strong>Adopta con confianza</strong>
+                  <p>Proceso guiado y seguimiento post-adopción.</p>
+                </div>
+              </li>
+            </ul>
+            <div class="aside-testimonial">
+              <p>
+                "Encontré a mi perrita Luna en 3 días. El proceso fue súper
+                fácil."
+              </p>
+              <span>— Valentina R., Suba</span>
+            </div>
+          </div>
+          <div class="aside-blobs">
+            <div class="ab ab-1"></div>
+            <div class="ab ab-2"></div>
+          </div>
+        </aside>
+
+        <!-- Columna derecha: formulario -->
+        <main class="reg-main">
+          <div class="reg-form-wrap">
+            <div class="reg-header">
+              <h1>Crear cuenta</h1>
+              <p>¿Ya tienes una? <a href="login.html">Inicia sesión</a></p>
+            </div>
+
+            <!-- S-1: Redes sociales -->
+            <div class="social-btns">
+              <button
+                class="btn-social"
+                id="btn-google"
+                onclick="registrarConRedSocial('google')"
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path
+                    d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+                    fill="#4285F4"
+                  />
+                  <path
+                    d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                    fill="#34A853"
+                  />
+                  <path
+                    d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"
+                    fill="#FBBC05"
+                  />
+                  <path
+                    d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z"
+                    fill="#EA4335"
+                  />
+                </svg>
+                Google
+              </button>
+              <button
+                class="btn-social"
+                id="btn-facebook"
+                onclick="registrarConRedSocial('facebook')"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                  />
+                </svg>
+                Facebook
+              </button>
+            </div>
+
+            <div class="divider"><span>o con tu correo</span></div>
+
+            <form id="form-registro" novalidate>
+              <div class="row-2">
+                <div class="field">
+                  <label for="nombre">Nombre <span class="req">*</span></label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    placeholder="María"
+                    autocomplete="given-name"
+                  />
+                  <span class="ferror" id="error-nombre"></span>
+                </div>
+                <div class="field">
+                  <label for="apellido"
+                    >Apellido <span class="req">*</span></label
+                  >
+                  <input
+                    type="text"
+                    id="apellido"
+                    placeholder="García"
+                    autocomplete="family-name"
+                  />
+                  <span class="ferror" id="error-apellido"></span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="correo"
+                  >Correo electrónico <span class="req">*</span></label
+                >
+                <input
+                  type="email"
+                  id="correo"
+                  placeholder="correo@ejemplo.com"
+                  autocomplete="email"
+                />
+                <span class="ferror" id="error-correo"></span>
+              </div>
+
+              <div class="field">
+                <label for="contrasena"
+                  >Contraseña <span class="req">*</span></label
+                >
+                <div class="input-icon-wrap">
+                  <input
+                    type="password"
+                    id="contrasena"
+                    placeholder="Mínimo 8 caracteres"
+                    autocomplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    class="icon-btn"
+                    onclick="togglePw()"
+                    aria-label="Ver contraseña"
+                  >
+                    <svg
+                      id="eye-icon"
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pw-meter">
+                  <div class="pw-track">
+                    <div id="pw-fill" class="pw-fill"></div>
+                  </div>
+                  <span id="pw-label"></span>
+                </div>
+                <span class="ferror" id="error-contrasena"></span>
+              </div>
+
+              <div class="field">
+                <label for="ubicacion"
+                  >Localidad <span class="req">*</span></label
+                >
+                <div class="select-wrap">
+                  <select id="ubicacion">
+                    <option value="">Selecciona tu localidad</option>
+                    <option value="usaquen">Usaquén</option>
+                    <option value="chapinero">Chapinero</option>
+                    <option value="santa_fe">Santa Fe</option>
+                    <option value="san_cristobal">San Cristóbal</option>
+                    <option value="usme">Usme</option>
+                    <option value="tunjuelito">Tunjuelito</option>
+                    <option value="bosa">Bosa</option>
+                    <option value="kennedy">Kennedy</option>
+                    <option value="fontibon">Fontibón</option>
+                    <option value="engativa">Engativá</option>
+                    <option value="suba">Suba</option>
+                    <option value="barrios_unidos">Barrios Unidos</option>
+                    <option value="teusaquillo">Teusaquillo</option>
+                    <option value="los_martires">Los Mártires</option>
+                    <option value="antonio_narino">Antonio Nariño</option>
+                    <option value="puente_aranda">Puente Aranda</option>
+                    <option value="candelaria">La Candelaria</option>
+                    <option value="rafael_uribe">Rafael Uribe Uribe</option>
+                    <option value="ciudad_bolivar">Ciudad Bolívar</option>
+                    <option value="otra">Otra ciudad</option>
+                  </select>
+                  <svg
+                    class="select-arrow"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 8"
+                  >
+                    <path
+                      d="M1 1l5 5 5-5"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <span class="ferror" id="error-ubicacion"></span>
+              </div>
+
+              <button
+                type="submit"
+                class="btn-primary btn-submit"
+                id="btn-submit"
+              >
+                <span id="btn-text">Crear mi cuenta</span>
+                <span
+                  id="btn-loader"
+                  class="spinner"
+                  style="display: none"
+                ></span>
+              </button>
+            </form>
+
+            <p class="reg-terms">
+              Al registrarte aceptas los <a href="#">Términos de uso</a> y la
+              <a href="#">Política de privacidad</a>.
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- PANTALLA: Confirmación -->
+    <div id="screen-success" class="reg-screen">
+      <div class="success-wrap">
+        <div class="success-check">✓</div>
+        <h2>¡Bienvenido/a, <span id="success-nombre"></span>!</h2>
+        <p class="success-msg">
+          Tu cuenta fue creada. Revisa tu correo electrónico y confirma tu dirección
+          antes de iniciar sesión.
+        </p>
+        <div class="success-data" id="success-data"></div>
+        <div class="success-actions">
+          <a href="login.html" class="btn-primary">Ir a iniciar sesión</a>
+          <button class="btn-ghost-sm" onclick="reiniciar()">
+            Registrar otra cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="registro.js"></script>
+  <script src="roles-ui.js"></script>
+</body>
+</html>

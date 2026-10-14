@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editar Refugio — RefugiosBogotá</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    .page-refugio .reg-aside {
+      background: linear-gradient(160deg, var(--verde) 0%, var(--verde-mid) 60%, #1a4a2e 100%);
+    }
+    .field textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--borde); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 0.92rem; color: var(--texto);
+      background: var(--blanco); resize: vertical; min-height: 90px;
+      outline: none; transition: border-color var(--t), box-shadow var(--t); line-height: 1.6;
+    }
+    .field textarea:focus   { border-color: var(--verde-light); box-shadow: 0 0 0 3px var(--verde-glow); }
+    .field textarea.valid   { border-color: var(--verde-light); }
+    .field textarea.invalid { border-color: var(--error); background: var(--error-pale); }
+    .char-count { font-size: 0.75rem; color: var(--texto-3); text-align: right; margin-top: 3px; }
+    .char-count.warn { color: var(--tierra); }
+    .field input[type="text"], .field input[type="number"] {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--borde); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 0.92rem; color: var(--texto);
+      background: var(--blanco); outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .field input:focus   { border-color: var(--verde-light); box-shadow: 0 0 0 3px var(--verde-glow); }
+    .field input.valid   { border-color: var(--verde-light); }
+    .field input.invalid { border-color: var(--error); background: var(--error-pale); }
+    .field label { display: block; font-size: 0.83rem; font-weight: 600; color: var(--texto-2); margin-bottom: 6px; }
+    .field { margin-bottom: 16px; }
+    .ferror { display: block; font-size: 0.78rem; color: var(--error); margin-top: 4px; min-height: 18px; }
+    .field-hint { display: block; font-size: 0.76rem; color: var(--texto-3); margin-top: 4px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px) { .row-2 { grid-template-columns: 1fr; } }
+    .select-wrap { position: relative; }
+    .select-wrap select {
+      width: 100%; padding: 11px 36px 11px 14px;
+      border: 1.5px solid var(--borde); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 0.92rem; color: var(--texto);
+      background: var(--blanco); appearance: none; outline: none;
+      cursor: pointer; transition: border-color var(--t), box-shadow var(--t);
+    }
+    .select-wrap select:focus   { border-color: var(--verde-light); box-shadow: 0 0 0 3px var(--verde-glow); }
+    .select-wrap select.invalid { border-color: var(--error); background: var(--error-pale); }
+    .select-arrow { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--texto-3); }
+    label .req { color: var(--tierra); margin-left: 2px; }
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.83rem; font-weight: 600; color: var(--texto-3);
+      text-decoration: none; margin-bottom: 12px; transition: color 0.2s;
+    }
+    .btn-back:hover { color: var(--verde); }
+
+    /* Pantalla de éxito */
+    .edit-success-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh; text-align: center;
+      padding: 40px 24px; gap: 16px;
+    }
+    .edit-success-wrap .success-check {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--verde); color: #fff;
+      font-size: 2rem; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 8px;
+    }
+    .edit-success-wrap h2 { font-family: var(--font-display); font-size: 1.6rem; color: var(--texto); }
+    .edit-success-wrap p  { color: var(--texto-3); max-width: 380px; }
+    .success-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+
+    /* Loading overlay */
+    .loading-form {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 300px; color: var(--texto-3); font-size: 0.9rem; gap: 10px;
+    }
+  .section-divider{display:flex;align-items:center;gap:10px;margin:26px 0 14px;font-weight:700;color:var(--texto)}.section-divider:after{content:"";height:1px;background:var(--borde);flex:1}#trabajadores{display:grid;gap:10px;margin:10px 0}.worker-row{display:grid;grid-template-columns:1.3fr 1.3fr 1fr 1fr auto;gap:8px;align-items:end;background:var(--crema);padding:12px;border-radius:10px}.worker-row input{width:100%;box-sizing:border-box;padding:9px;border:1px solid var(--borde);border-radius:8px}.worker-remove{border:0;background:#fee2e2;color:#b91c1c;border-radius:8px;padding:9px;cursor:pointer}@media(max-width:700px){.worker-row{grid-template-columns:1fr 1fr}.worker-remove{grid-column:1/-1}}
+</style>
+</head>
+<body class="page-registro page-refugio">
+
+  <nav class="nav nav--minimal" id="nav">
+    <div class="nav-inner">
+      <a href="animales.html" class="logo">
+        <span class="logo-paw">🐾</span>
+        <span class="logo-text">Refugios<strong>Bogotá</strong></span>
+      </a>
+      <div class="nav-user" id="nav-user">
+        <span class="user-greeting" id="user-greeting"></span>
+        <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PANTALLA 1: FORMULARIO DE EDICIÓN -->
+  <div id="screen-form" class="reg-screen active">
+    <div class="reg-layout">
+
+      <aside class="reg-aside">
+        <div class="aside-content">
+          <h2 class="aside-title">Mantén actualizada la información de tu refugio.</h2>
+          <ul class="aside-features">
+            <li>
+              <span class="feat-icon">✏️</span>
+              <div>
+                <strong>Edita cuando quieras</strong>
+                <p>Actualiza el nombre, dirección o descripción en cualquier momento.</p>
+              </div>
+            </li>
+            <li>
+              <span class="feat-icon">🐾</span>
+              <div>
+                <strong>Información precisa</strong>
+                <p>Los adoptantes verán siempre los datos más recientes de tu refugio.</p>
+              </div>
+            </li>
+            <li>
+              <span class="feat-icon">📍</span>
+              <div>
+                <strong>Localidad correcta</strong>
+                <p>Asegúrate de que tu localidad esté correcta para aparecer en búsquedas.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="aside-blobs">
+          <div class="ab ab-1"></div>
+          <div class="ab ab-2"></div>
+        </div>
+      </aside>
+
+      <main class="reg-main">
+        <div class="reg-form-wrap">
+
+          <a href="mis-refugios.html" class="btn-back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            Mis refugios
+          </a>
+
+          <div class="reg-header">
+            <h1>Editar refugio</h1>
+            <p>Modifica la información institucional de tu refugio.</p>
+          </div>
+
+          <!-- Loading state -->
+          <div class="loading-form" id="loading-form">
+            <span class="spinner"></span> Cargando datos del refugio...
+          </div>
+
+          <!-- Formulario (oculto hasta cargar datos) -->
+          <form id="form-editar" novalidate style="display:none">
+
+            <div class="field">
+              <label for="nombre_refugio">Nombre del refugio <span class="req">*</span></label>
+              <input type="text" id="nombre_refugio" placeholder="Ej. Fundación Patitas Felices" autocomplete="off"/>
+              <span class="ferror" id="error-nombre_refugio"></span>
+            </div>
+
+            <div class="row-2">
+              <div class="field">
+                <label for="localidad">Localidad <span class="req">*</span></label>
+                <div class="select-wrap">
+                  <select id="localidad">
+                    <option value="">Selecciona localidad</option>
+                    <option value="usaquen">Usaquén</option>
+                    <option value="chapinero">Chapinero</option>
+                    <option value="santa_fe">Santa Fe</option>
+                    <option value="san_cristobal">San Cristóbal</option>
+                    <option value="usme">Usme</option>
+                    <option value="tunjuelito">Tunjuelito</option>
+                    <option value="bosa">Bosa</option>
+                    <option value="kennedy">Kennedy</option>
+                    <option value="fontibon">Fontibón</option>
+                    <option value="engativa">Engativá</option>
+                    <option value="suba">Suba</option>
+                    <option value="barrios_unidos">Barrios Unidos</option>
+                    <option value="teusaquillo">Teusaquillo</option>
+                    <option value="los_martires">Los Mártires</option>
+                    <option value="antonio_narino">Antonio Nariño</option>
+                    <option value="puente_aranda">Puente Aranda</option>
+                    <option value="candelaria">La Candelaria</option>
+                    <option value="rafael_uribe">Rafael Uribe Uribe</option>
+                    <option value="ciudad_bolivar">Ciudad Bolívar</option>
+                  </select>
+                  <svg class="select-arrow" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                </div>
+                <span class="ferror" id="error-localidad"></span>
+              </div>
+
+              <div class="field">
+                <label for="capacidad">Capacidad máxima de perros <span class="req">*</span></label>
+                <input type="number" id="capacidad" placeholder="Ej. 30" min="1" max="9999"/>
+                <span class="field-hint">Cantidad máxima de perros que puede albergar el refugio.</span>
+                <span class="ferror" id="error-capacidad"></span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="direccion">Dirección física <span class="req">*</span></label>
+              <input type="text" id="direccion" placeholder="Ej. Calle 123 # 45-67, Suba" autocomplete="off"/>
+              <span class="ferror" id="error-direccion"></span>
+            </div>
+
+            <div class="field">
+              <label for="descripcion">Descripción del refugio <span class="req">*</span></label>
+              <textarea id="descripcion" placeholder="Cuéntanos la historia, misión y valores de tu refugio..." maxlength="200"></textarea>
+              <div class="char-count" id="char-desc">0 / 200</div>
+              <span class="ferror" id="error-descripcion"></span>
+            </div>
+
+            <div class="section-divider"><span>Responsable</span></div><div class="row-2">
+              <div class="field"><label for="responsable_nombre">Nombre del responsable <span class="req">*</span></label><input type="text" id="responsable_nombre"/><span class="ferror" id="error-responsable_nombre"></span></div>
+              <div class="field"><label for="responsable_correo">Correo del responsable <span class="req">*</span></label><input type="email" id="responsable_correo"/><span class="ferror" id="error-responsable_correo"></span></div>
+              <div class="field"><label for="responsable_telefono">Teléfono del responsable <span class="req">*</span></label><input type="text" id="responsable_telefono"/><span class="ferror" id="error-responsable_telefono"></span></div>
+              <div class="field"><label for="telefono">Teléfono general</label><input type="text" id="telefono"/></div></div>
+            <div class="section-divider"><span>Equipo Humano</span></div><div id="trabajadores"></div><button type="button" class="btn-ghost btn-sm" onclick="agregarTrabajador()">+ Agregar trabajador</button>
+            <div class="section-divider"><span>Permisos y autorizaciones</span></div><div class="field" style="grid-column:1/-1"><label>Permisos o autorizaciones declarados <span class="req">*</span></label><div style="display:grid;gap:8px;background:var(--crema);padding:14px;border-radius:10px"><label><input type="checkbox" name="permisos" value="Permiso de funcionamiento"> Permiso de funcionamiento</label><label><input type="checkbox" name="permisos" value="Autorización sanitaria"> Autorización sanitaria</label><label><input type="checkbox" name="permisos" value="Registro o documento de constitución"> Registro o documento de constitución</label><label><input type="checkbox" name="permisos" value="Autorización relacionada con protección animal"> Autorización relacionada con protección animal</label><label><input type="checkbox" name="permisos" value="Otro documento o autorización"> Otro documento o autorización</label></div><span class="ferror" id="error-permisos_autorizaciones"></span></div>
+            <div class="section-divider"><span>Redes sociales</span></div><div class="row-2">
+              <div class="field"><label for="instagram">Instagram</label><input type="url" id="instagram"/></div><div class="field"><label for="facebook">Facebook</label><input type="url" id="facebook"/></div>
+              <div class="field"><label for="tiktok">TikTok</label><input type="url" id="tiktok"/></div><div class="field"><label for="x_social">X</label><input type="url" id="x_social"/></div>
+              <div class="field"><label for="youtube">YouTube</label><input type="url" id="youtube"/></div><div class="field"><label for="whatsapp">WhatsApp</label><input type="text" id="whatsapp"/></div></div>
+
+            <div class="field">
+              <label for="logo_url">Logo del refugio</label>
+              <input type="text" id="logo_url" placeholder="Ej. https://mirefugio.com/logo.png" autocomplete="off"/>
+              <span class="field-hint">Opcional — URL pública de la imagen del logo.</span>
+              <span class="ferror" id="error-logo_url"></span>
+            </div>
+
+            <button type="submit" class="btn-primary btn-submit" id="btn-submit" style="width:100%; margin-top:8px;">
+              <span id="btn-text">Guardar cambios</span>
+              <span id="btn-loader" class="spinner" style="display:none"></span>
+            </button>
+
+          </form>
+
+          <p class="reg-terms" id="reg-terms" style="display:none">Los cambios se reflejarán de inmediato en la plataforma.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- PANTALLA 2: CONFIRMACIÓN DE EDICIÓN -->
+  <div id="screen-success" style="display:none">
+    <div class="edit-success-wrap">
+      <div class="success-check">✓</div>
+      <h2>¡Refugio actualizado!</h2>
+      <p>Los datos de <strong id="success-nombre"></strong> se guardaron correctamente.</p>
+      <div class="success-actions">
+        <a href="mis-refugios.html" class="btn-primary">Ver mis refugios</a>
+        <a href="refugios.html"     class="btn-ghost-sm">Explorar refugios</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="editar-refugio.js?v=11"></script>
+<script src="roles-ui.js"></script>
+</body>
+</html>

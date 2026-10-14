@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Mis adopciones — RefugiosBogotá</title><link rel="stylesheet" href="styles.css"/><style>
+.page{max-width:980px;margin:auto;padding:42px 24px 70px}.page h1{font-family:var(--font-display);margin-bottom:6px}.page-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:8px}.intro{color:var(--texto-2);margin-top:0}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}.summary-card{background:#fff;border:1px solid var(--borde);border-radius:var(--radius);padding:16px}.summary-card strong{display:block;font-size:1.45rem;font-family:var(--font-display)}.summary-card span{font-size:.78rem;color:var(--texto-2)}.list{display:grid;gap:16px}.item{background:#fff;border:1px solid var(--borde);border-radius:var(--radius);padding:20px;display:flex;justify-content:space-between;gap:24px;align-items:flex-start}.item-main{display:flex;gap:16px;min-width:0;flex:1}.content{min-width:0;width:100%}.title-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item-actions{min-width:180px}.last-msg{margin-top:10px;padding:10px 12px;background:#f7f3ed;border-radius:9px;font-size:.82rem}.chat-area{margin-top:12px}.chat-panel{border:1px solid var(--borde);border-radius:12px;padding:12px;background:#fff}.chat-panel.error{color:#a34b42;background:#f8e9e7}.chat-header{display:flex;justify-content:space-between;gap:10px;font-size:.85rem;padding-bottom:8px;border-bottom:1px solid var(--borde)}.chat-header span{color:var(--texto-2);font-size:.75rem}.chat-messages{max-height:260px;overflow:auto;margin:10px 0;display:grid;gap:7px}.chat-msg{padding:8px 10px;border-radius:10px;background:#f7f3ed;font-size:.82rem;max-width:85%}.chat-msg.mine{margin-left:auto;background:var(--verde-pale)}.chat-msg small{display:block;color:#777;margin-top:4px;font-size:.68rem}.empty-chat{padding:14px;text-align:center;color:var(--texto-2);font-size:.82rem}.chat-compose{display:flex;gap:8px}.chat-compose input{flex:1}.page-head .photo{width:82px;height:82px;flex:0 0 82px;border-radius:12px;background:var(--crema);display:flex;align-items:center;justify-content:center;font-size:2.4rem;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover}.item h3{margin:0 0 7px;font-family:var(--font-display)}.meta{color:var(--texto-2);font-size:.84rem;line-height:1.7}.state{font-size:.76rem;font-weight:700;padding:6px 10px;border-radius:999px;white-space:nowrap;background:var(--crema)}.state.completada{background:var(--verde-pale);color:var(--verde)}.state.rechazada,.state.cancelada{background:#f8e9e7;color:#a34b42}.state.aprobada{background:#eef3df;color:#65772d}.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}.step{padding:8px 6px;border-radius:8px;background:#f2eee8;color:#8a8176;text-align:center;font-size:.68rem;font-weight:700}.step.active{background:var(--verde-pale);color:var(--verde)}.step.done{background:#e8f1dc;color:#65772d}.notice{margin-top:12px;padding:11px 13px;border-radius:9px;background:var(--crema);font-size:.82rem;color:var(--texto-2)}.success{background:var(--verde-pale);color:var(--verde);font-weight:600}.empty{text-align:center;padding:50px 20px;color:var(--texto-2);background:#fff;border:1px solid var(--borde);border-radius:var(--radius)}@media(max-width:700px){.summary{grid-template-columns:1fr}.page-head,.title-row{display:block}.page-head button{margin-top:8px}.item{display:block}.item-main{margin-bottom:14px}.item-actions{min-width:0}.state{display:inline-block;margin-bottom:8px}.chat-compose{display:block}.chat-compose button{margin-top:7px;width:100%}}
+</style></head><body class="page-app"><nav class="nav nav--app"><div class="nav-inner"><a href="animales.html" class="logo"><span class="logo-paw">🐾</span><span class="logo-text">Refugios<strong>Bogotá</strong></span></a><div class="nav-app-links"><a href="animales.html" class="nav-app-link">Adoptar</a><a href="refugios.html" class="nav-app-link">Buscar refugios</a><a href="reporte-animal.html" class="nav-app-link">Reportar animal</a></div><div class="account-menu" id="account-menu"><button type="button" class="account-trigger" onclick="toggleAccountMenu()">👤 Mi cuenta ▾</button><div class="account-dropdown"><a href="mis-adopciones.html" data-rol="adoptante">🐾 Mis adopciones</a><a href="mis-refugios.html" data-rol="refugio">🏠 Mis refugios</a><a href="perfil.html">👤 Mi perfil</a><a href="registro-refugio.html" data-rol="adoptante">🏠 Registrar refugio</a><a href="admin.html" data-rol="administrador">⚙️ Administración</a><div class="account-sep"></div><button type="button" class="danger" onclick="cerrarSesion()">↪ Cerrar sesión</button></div></div></div></nav><main class="page"><a href="animales.html" class="btn-ghost" style="display:inline-flex;margin-bottom:18px">← Volver a adoptar</a><div class="page-head"><div><h1>Mis adopciones</h1><p class="intro">Esta es tu sección personal para consultar y dar seguimiento a todas tus solicitudes de adopción.</p></div><button class="btn-ghost" onclick="cargar()">↻ Actualizar</button></div><div id="summary" class="summary"></div><div id="list" class="list"></div></main><script>
+'use strict';
+const API='/api';const token=sessionStorage.getItem('token')||localStorage.getItem('token');
+if(!token) location.href='login.html';
+const list=document.getElementById('list'),summary=document.getElementById('summary');
+const labels={pendiente:'Pendiente',aprobada:'Aprobada',rechazada:'Rechazada',cancelada:'Cancelada',completada:'Completada'};
+const explanations={pendiente:'La solicitud fue enviada y está pendiente de revisión por el refugio.',aprobada:'El refugio aprobó tu solicitud. Ahora pueden conversar para completar el proceso.',completada:'¡La adopción fue realizada! El perro ya figura como adoptado y su ficha está cerrada.',rechazada:'El refugio rechazó esta solicitud. Puedes consultar otros perros disponibles.',cancelada:'Esta solicitud fue cancelada.'};
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function fecha(v){if(!v)return '—';const d=new Date(String(v).replace(' ','T'));return Number.isNaN(d.getTime())?v:d.toLocaleString('es-CO',{dateStyle:'medium',timeStyle:'short'})}
+function foto(a){let img='';try{const f=JSON.parse(a.fotos_urls||'[]');img=Array.isArray(f)?f[0]:''}catch(e){}return img?`<img src="${esc(img)}" alt="${esc(a.animal)}" onerror="this.parentElement.innerHTML='🐶'">`:'🐶'}
+function render(adopciones){
+ const activas=adopciones.filter(a=>['pendiente','aprobada'].includes(a.estado)).length;
+ const realizadas=adopciones.filter(a=>a.estado==='completada').length;
+ summary.innerHTML=`<div class="summary-card"><strong>${adopciones.length}</strong><span>Solicitudes realizadas</span></div><div class="summary-card"><strong>${activas}</strong><span>En proceso</span></div><div class="summary-card"><strong>${realizadas}</strong><span>Adopciones realizadas</span></div>`;
+ if(!adopciones.length){list.innerHTML='<div class="empty"><h3>Aún no tienes solicitudes de adopción</h3><p>Cuando solicites adoptar un perro, aquí aparecerá todo el proceso y podrás conversar con el refugio.</p><a class="btn-primary" href="animales.html">Ver perros disponibles</a></div>';return;}
+ list.innerHTML=adopciones.map(a=>{
+   const estado=labels[a.estado]||a.estado;
+   const seguimiento=a.estado==='pendiente'?'Solicitud enviada. El refugio debe revisarla.':a.estado==='aprobada'?'Solicitud aprobada. Puedes conversar con el refugio para coordinar la entrega.':a.estado==='completada'?'Adopción realizada. El perro quedó registrado como adoptado.':'Solicitud finalizada.';const pasos=['Solicitud enviada','Revisión','Aprobación','Adopción realizada'];const nivel=a.estado==='pendiente'?0:a.estado==='aprobada'?2:a.estado==='completada'?3:1;const timeline=pasos.map((p,i)=>`<div class="step ${i<nivel?'done ':''}${i===nivel?'active':''}">${i+1}. ${p}</div>`).join('');
+   return `<article class="item" id="adopcion-${a.id_adopcion}">
+     <div class="item-main"><div class="photo">${foto(a)}</div><div class="content">
+       <div class="title-row"><h3>🐶 ${esc(a.animal)}</h3><span class="state ${esc(a.estado)}">${esc(estado)}</span></div>
+       <div class="meta"><strong>Refugio:</strong> ${esc(a.nombre_refugio||'No especificado')}<br><strong>Solicitud:</strong> ${esc(fecha(a.fecha_solicitud))}${a.fecha_respuesta?`<br><strong>Respuesta:</strong> ${esc(fecha(a.fecha_respuesta))}`:''}${a.fecha_completada?`<br><strong>Adopción realizada:</strong> ${esc(fecha(a.fecha_completada))}`:''}</div>
+       <div class="timeline">${timeline}</div><div class="notice ${a.estado==='completada'?'success':''}"><strong>Seguimiento:</strong> ${esc(seguimiento)}</div>
+       <div class="meta" style="margin-top:10px"><strong>Estado actual:</strong> ${esc(labels[a.estado]||a.estado)} · <strong>Solicitud #${esc(a.id_adopcion)}</strong></div>
+       ${a.ultimo_mensaje?`<div class="last-msg"><strong>Último mensaje:</strong> ${esc(a.ultimo_mensaje)}</div>`:''}
+       <div id="chat-${a.id_adopcion}" class="chat-area"></div>
+     </div></div>
+     <div class="item-actions"><button class="btn-primary" onclick="abrirChat(${a.id_adopcion})">💬 ${a.estado==='completada'?'Ver conversación':'Chatear con el refugio'}</button></div>
+   </article>`;
+ }).join('');
+}
+async function cargar(){
+ list.innerHTML='<div class="empty"><h3>Cargando mis adopciones...</h3><p>Consultando directamente las solicitudes de tu cuenta.</p></div>';
+ try{
+  const r=await fetch(`${API}/mis-adopciones?ts=${Date.now()}`,{headers:{Authorization:'Bearer '+token,Cache:'no-store'}});
+  const j=await r.json();
+  if(r.status===401){location.href='login.html';return;}
+  if(!r.ok || !j.exito){list.innerHTML=`<div class="empty"><h3>No se pudo cargar Mis adopciones</h3><p>${esc(j.mensaje||'Error al consultar tus solicitudes.')}</p><button class="btn-primary" onclick="cargar()">Intentar de nuevo</button></div>`;return;}
+  let adopciones=Array.isArray(j.adopciones)?j.adopciones:[];
+  // Si acabamos de volver de una solicitud, mostrar inmediatamente el registro
+  // confirmado por POST /api/adopciones aunque la consulta de la lista aún no
+  // haya refrescado el navegador. Luego se sincroniza con la BD normalmente.
+  try {
+    const pendiente=JSON.parse(localStorage.getItem('ultima_adopcion_registro')||'null');
+    if(pendiente && pendiente.id_adopcion && !adopciones.some(a=>Number(a.id_adopcion)===Number(pendiente.id_adopcion))){
+      adopciones=[{...pendiente,id_adoptante:j.id_usuario,total_mensajes:1,ultimo_mensaje:pendiente.mensaje||'Solicitud de adopción enviada.'},...adopciones];
+    }
+  } catch(e) {}
+  const usuario=j.usuario||{};
+  const head=document.querySelector('.intro');
+  if(head) head.textContent=`Solicitudes de ${usuario.nombre||'tu cuenta'}. Aquí se conserva todo el seguimiento, incluso después de completar una adopción.`;
+  render(adopciones);
+  try {
+    const pendiente=JSON.parse(localStorage.getItem('ultima_adopcion_registro')||'null');
+    if(pendiente && adopciones.some(a=>Number(a.id_adopcion)===Number(pendiente.id_adopcion)) && Array.isArray(j.adopciones) && j.adopciones.some(a=>Number(a.id_adopcion)===Number(pendiente.id_adopcion))) localStorage.removeItem('ultima_adopcion_registro');
+  } catch(e) {}
+ }catch(e){
+  console.error(e);
+  list.innerHTML='<div class="empty"><h3>No se pudo conectar con el servidor</h3><p>Verifica que Node.js esté ejecutándose.</p><button class="btn-primary" onclick="cargar()">Intentar de nuevo</button></div>';
+ }
+}
+async function abrirChat(id){
+ const box=document.getElementById(`chat-${id}`); if(!box)return;
+ box.innerHTML='<div class="chat-panel">Cargando conversación...</div>';
+ try{
+   const r=await fetch(`${API}/adopciones/${id}/mensajes?ts=${Date.now()}`,{headers:{Authorization:'Bearer '+token,'Cache-Control':'no-cache'}});
+   const j=await r.json();
+   if(!r.ok || !j.exito){box.innerHTML=`<div class="chat-panel error">${esc(j.mensaje||'No se pudo cargar la conversación.')}</div>`;return;}
+   const mensajes=j.mensajes||[];
+   box.innerHTML=`<div class="chat-panel"><div class="chat-header"><strong>💬 Conversación con ${esc(j.adopcion?.nombre_refugio||'el refugio')}</strong><span>${mensajes.length} mensaje(s)</span></div><div class="chat-messages">${mensajes.map(m=>`<div class="chat-msg ${Number(m.id_usuario)===Number(j.adopcion.id_adoptante)?'mine':'theirs'}"><b>${esc(m.nombre||'Usuario')}</b><div>${esc(m.mensaje)}</div><small>${esc(fecha(m.fecha))}</small></div>`).join('')||'<div class="empty-chat">Aún no hay mensajes. Escribe el primero para comunicarte con el refugio.</div>'}</div><div class="chat-compose"><input id="chat-input-${id}" placeholder="Escribe un mensaje para el refugio..." maxlength="1000" onkeydown="if(event.key==='Enter'){event.preventDefault();enviarChat(${id})}"><button class="btn-primary" onclick="enviarChat(${id})">Enviar</button></div></div>`;
+   document.getElementById(`chat-input-${id}`)?.focus();
+ }catch(e){console.error(e);box.innerHTML='<div class="chat-panel error">No se pudo conectar para cargar la conversación.</div>';}
+}
+async function enviarChat(id){const input=document.getElementById(`chat-input-${id}`),texto=input?.value.trim();if(!texto)return;try{const r=await fetch(`${API}/adopciones/${id}/mensajes`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({mensaje:texto})});const j=await r.json();if(!j.exito){alert(j.mensaje||'No se pudo enviar');return;}await abrirChat(id);}catch(e){alert('No se pudo enviar el mensaje.')}}
+function cerrarSesion(){sessionStorage.clear();localStorage.removeItem('token');localStorage.removeItem('usuario');location.href='login.html'}
+cargar();
+const solicitudActual=new URLSearchParams(location.search).get('solicitud');
+if(solicitudActual){setTimeout(()=>{const el=document.getElementById('adopcion-'+solicitudActual);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='3px solid var(--verde)';setTimeout(()=>el.style.outline='',3000);abrirChat(Number(solicitudActual));}},700);}
+
+function toggleAccountMenu(){document.getElementById('account-menu')?.classList.toggle('open')}
+document.addEventListener('click',e=>{const m=document.getElementById('account-menu');if(m&&!m.contains(e.target))m.classList.remove('open')});
+</script><script src="roles-ui.js?v=22"></script></body></html>
